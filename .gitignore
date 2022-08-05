@@ -1,0 +1,4 @@
+.env
+redis-volume
+.idea
+mysql

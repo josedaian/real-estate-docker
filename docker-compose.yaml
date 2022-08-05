@@ -1,0 +1,55 @@
+version: '3.9'
+
+networks:
+  real-estate-network:
+    driver: bridge
+
+services:
+
+  real-estate-webserver:
+    image: nginx:alpine
+    container_name: real-estate-webserver
+    volumes:
+      - ./services:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "${PORT}:95"
+    networks:
+      - real-estate-network
+
+  real-estate-mysql:
+    container_name: real-estate-mysql
+    restart: unless-stopped
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    networks:
+      - real-estate-network
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  real-estate-redis:
+    image: redis:alpine
+    ports:
+      - "${REDIS_PORT}:6379"
+    hostname: redis
+    volumes:
+      - ./redis-volume:/data
+    networks:
+      - real-estate-network
+
+  api-real-estate:
+    build:
+      context: ./dockerfiles
+      dockerfile: php8.1.dockerfile
+    container_name: api-real-estate
+    volumes:
+      - ./services/api-real-estate:/var/www
+    networks:
+      - real-estate-network
+#    command: /tmp/scripts/run.sh

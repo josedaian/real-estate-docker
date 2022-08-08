@@ -18,6 +18,7 @@ Next, we configure our .env with the data from our database and redis configurat
 DB_HOST=real-estate-mysql
 REDIS_HOST=real-estate-redis
 ```
+
 After that, run the following commands:
 ```
 docker exec -it api-real-estate php artisan migrate
@@ -30,6 +31,11 @@ In .env file you can set custom ports for services:
 - Redis (default: 6379)
 - Mysql (default: 4806)
 
+### Optional Population by CSV file
+You can put the csv file in the services/api-real-estate/public folder and name it gustavo-madero.csv so that the table is populated inside the seeder.
+Also, inside the .env set the REQUIRE_CSV parameter to TRUE.
+
+**AFTER THAT, RUN THE SEEDERS AGAIN.**
 
 ## Endpoints available
 - {BASE_PATH}:8000/price-m2/zip-codes/{zipCode}/aggregate/{type}?construction_type={1-7}

@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Enums\PriceTypes;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -59,7 +60,7 @@ class Handler extends ExceptionHandler
     {
         return match (true) {
             $e instanceof NotFoundHttpException => new ApiException('Not found', $e->getStatusCode(), $e),
-            default => new ApiException($e->getMessage(), $e->getCode(), $e),
+            default => new ApiException($e->getMessage(), $e->getCode() > 0 ? $e->getCode() : Response::HTTP_INTERNAL_SERVER_ERROR, $e),
         };
     }
 }

@@ -52,4 +52,4 @@ services:
       - ./services/api-real-estate:/var/www
     networks:
       - real-estate-network
-#    command: /tmp/scripts/run.sh
+   command: /tmp/scripts/run.sh

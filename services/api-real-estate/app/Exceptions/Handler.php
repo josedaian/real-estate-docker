@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Enums\PriceTypes;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -46,5 +48,18 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        return parent::render($request, $this->parsedException($e));
+    }
+
+    protected function parsedException(Throwable $e)
+    {
+        return match (true) {
+            $e instanceof NotFoundHttpException => new ApiException('Not found', $e->getStatusCode(), $e),
+            default => new ApiException($e->getMessage(), $e->getCode(), $e),
+        };
     }
 }

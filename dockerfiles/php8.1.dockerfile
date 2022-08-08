@@ -31,6 +31,8 @@ RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
 RUN docker-php-ext-install gd
 
+RUN pecl install redis && docker-php-ext-enable redis
+
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 

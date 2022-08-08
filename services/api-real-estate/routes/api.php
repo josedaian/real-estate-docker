@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Enums\PriceTypes;
+use App\Http\Controllers\Pricing\GetPriceM2ByZipCodeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('price-m2')->group(function(){
+    Route::prefix('zip-codes')->group(function(){
+        Route::get('/{zipCode}/aggregate/{priceType}', GetPriceM2ByZipCodeController::class)->whereIn('priceType', ['min', 'max', 'avg']);
+    });
 });

@@ -2,7 +2,7 @@
 ### Services
 - Nginx
 - PHP 8.1
-- Laravel
+- Laravel 9
 - Redis 6.2.6
 - MySQl 8.0
 
@@ -11,6 +11,17 @@ After cloning the repository and being inside the project folder, run the follow
 ```sh
 cp .env.example .env
 docker-compose up
+docker exec -it api-real-estate php artisan key:generate
+```
+Next, we configure our .env with the data from our database and redis configuration.
+```
+DB_HOST=real-estate-mysql
+REDIS_HOST=real-estate-redis
+```
+After that, run the following commands:
+```
+docker exec -it api-real-estate php artisan migrate
+docker exec -it api-real-estate php artisan db:seed
 ```
 
 ### Optional Step
@@ -19,6 +30,9 @@ In .env file you can set custom ports for services:
 - Redis (default: 6379)
 - Mysql (default: 4806)
 
+
+## Endpoints available
+- {BASE_PATH}:8000/price-m2/zip-codes/{zipCode}/aggregate/{type}?construction_type={1-7}
 ## License
 
 MIT
